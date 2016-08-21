@@ -30,11 +30,16 @@
 		<form action = "index.php?page=users&id=<?php if(isset($opened['id'])){echo $opened['id'];}else{echo $opened;}  ?>" method = "post" role = "form">
 			<div class = "form-group">
 				<label for = "first">First Name:</label>
-				<input class="form-control" type = "text" name = "first" value = "<?php echo $opened['first'];?>" id = "first" placeholder = "First Name">
+				<input class="form-control" type = "text" name = "first" value = "<?php echo $opened['first'];?>" id = "first" placeholder = "First Name" autocomplete = "off">
 			</div>
 			<div class = "form-group">
 				<label for = "last">Last Name:</label>
-				<input class="form-control" type = "text" name = "last" value = "<?php echo $opened['last'];?>" id = "last" placeholder = "Last Name">
+				<input class="form-control" type = "text" name = "last" value = "<?php echo $opened['last'];?>" id = "last" placeholder = "Last Name"
+				autocomplete = "off">
+			</div>
+			<div class = "form-group">
+				<label for = "email">Email Address:</label>
+				<input class="form-control" type = "text" name = "email" value = "<?php echo $opened['email'];?>" id = "email" placeholder = "Email Address" autocomplete = "off">
 			</div>
 			<div class = "form-group">
 				<label for = "status">Status:</label>
@@ -44,8 +49,12 @@
 				</select>
 			</div>
 			<div class = "form-group">
-				<label for = "slug">Password:</label>
-				<input class="form-control" type = "text" name = "password" value = "" id = "password" placeholder = "Password">
+				<label for = "password">Password:</label>
+				<input class="form-control" type = "password" name = "password" value = "" id = "password" placeholder = "Password">
+			</div>
+			<div class = "form-group">
+				<label for = "passwordv">Verify Password:</label>
+				<input class="form-control" type = "password" name = "passwordv" value = "" id = "passwordv" placeholder = "Type Password Again">
 			</div>
 			<button type="submit" class="btn btn-default">Save</button>
 			<input type="hidden" name="submitted" value="1">	<!-- to check whether the form has been submitted -->

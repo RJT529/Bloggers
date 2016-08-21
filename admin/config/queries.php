@@ -26,9 +26,9 @@
 				$r = mysqli_query($dbc,$q);	
 
 				if($r) {
-					$message = '<p>Page was '.$action.'!</p>';
+					$message = '<p class = "alert alert-success">Page was '.$action.'!</p>';
 				} else {
-					$message = '<p>Page could not be '.$action.'!</p>';
+					$message = '<p class = "alert alert-danger">Page could not be '.$action.'!</p>';
 				}
 
 			}
@@ -51,24 +51,37 @@
 					$last = mysqli_real_escape_string($dbc,$_POST['last']);
 
 					if($_POST['password'] != '') {
-						$password = "password = sha1('$_POST[password]')";
+						if($_POST['password'] == $_POST['passwordv']) {
+							$password = "password = sha1('$_POST[password]')";
+							$verify = true;
+						} else {
+							$verify = false;
+						}
+					} else {
+						$verify = false;
 					}
+							
 
 					if(isset($_POST['id']) && $_POST['id'] != 0) {
 						$action = 'updated';
-						$q = "UPDATE users SET first = '$first', last = '$last', ".$password." status = ".$_POST['status']." WHERE id = ".$_GET['id'].""; 
+						$q = "UPDATE users SET first = '$first', last = '$last', email = '".$_POST['email']." ', ".$password." status = ".$_POST['status']." WHERE id = ".$_GET['id'].""; 
 						//
 					} else {
-						$action = 'added';
-						$q = "INSERT INTO users (first, last, password, status) VALUES ('".$first."','".$last."', '".sha1('$_POST[password]')."','".$_POST['status']."')";
+							$action = 'added';
+						if($verify == true) {
+							$q = "INSERT INTO users (first, last, email, password, status) VALUES ('".$first."','".$last."','".$_POST['email']."','".sha1('$_POST[password]')."','".$_POST['status']."')";
+						}
 					}
 
 					$r = mysqli_query($dbc,$q);	
 
 					if($r) {
-						$message = '<p>User was '.$action.'!</p>';
+						$message = '<p class = "alert alert-success">User was '.$action.'!</p>';
 					} else {
-						$message = '<p>User could not be '.$action.'!<br>'.mysqli_error($dbc).'</p>';
+						$message = '<p  class = "alert alert-danger">User could not be '.$action.'!<br>'.mysqli_error($dbc).'</p>';
+						if($verify == false) {
+							$message .= '<p  class = "alert alert-danger">Passwords fields empty and/or do not match. </p>';
+						}
 					}
 
 				}
@@ -85,6 +98,38 @@
 		break;
 
 		case 'settings':
+
+			if(isset($_POST['submitted'])) {
+				if($_POST['submitted'] == 1) {
+
+					$label = mysqli_real_escape_string($dbc,$_POST['label']);
+					$value = mysqli_real_escape_string($dbc,$_POST['value']);
+		
+
+						$action = 'updated';
+					if(isset($_POST['openedid']) && $_POST['openedid'] != 0) {
+						$q = "UPDATE settings SET id = '".$_POST['id']."', label = '$label', value = '".$value."'  WHERE id = ".$_POST['openedid'].""; 
+						$r = mysqli_query($dbc,$q);	
+					} 
+
+
+					if($r) {
+						$message = '<p class = "alert alert-success">Setting was '.$action.'!</p>';
+					} else {
+						$message = '<p  class = "alert alert-danger">Setting could not be '.$action.'!<br>'.mysqli_error($dbc).'</p>';
+						
+					}
+
+				}
+			}
+			
+
+			if (isset($_GET['id']) && $_GET['id'] != 0) {
+				$opened = data_user($dbc, $_GET['id']);
+			} else {
+				$opened = 0;
+			}
+
 
 		break;
 
